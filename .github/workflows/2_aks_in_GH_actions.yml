@@ -32,7 +32,8 @@ jobs:
 
       - name: Terraform init
         run: terraform init
-        
+      - name: echo
+        run: echo $RGNAME
       - name: Terraform plan
         run: terraform plan -out plan.out -var resource_group_name=$RGNAME
         
