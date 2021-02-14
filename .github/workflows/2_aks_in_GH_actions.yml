@@ -25,15 +25,18 @@ jobs:
       ARM_CLIENT_SECRET: ${{secrets.ARM_CLIENT_SECRET}}
       ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
       ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
+      RGNAME: devnetwork-aks-${GITHUB_SHA:6}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v2
 
       - name: Terraform init
         run: terraform init
-        
+      - name: echo
+        run: echo devnetwork-ask-$(echo ${GITHUB_SHA} | cut -c1-6)
+
       - name: Terraform plan
-        run: terraform plan -out plan.out
+        run: terraform plan -out plan.out -var resource_group_name=devnetwork-ask-$(echo ${GITHUB_SHA} | cut -c1-6)
         
       - name: Terraform apply
         run: terraform apply plan.out
