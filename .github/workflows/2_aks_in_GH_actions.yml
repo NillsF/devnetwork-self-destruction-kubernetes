@@ -33,9 +33,10 @@ jobs:
       - name: Terraform init
         run: terraform init
       - name: echo
-        run: echo $RGNAME
+        run: echo devnetwork-ask-$(echo ${GITHUB_SHA} | cut -c1-6)
+
       - name: Terraform plan
-        run: terraform plan -out plan.out -var resource_group_name=$RGNAME
+        run: terraform plan -out plan.out -var resource_group_name=devnetwork-ask-$(echo ${GITHUB_SHA} | cut -c1-6)
         
       - name: Terraform apply
         run: terraform apply plan.out
