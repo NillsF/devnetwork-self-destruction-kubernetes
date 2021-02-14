@@ -1,0 +1,1 @@
+# devnetwork-self-destruction-kubernetes
