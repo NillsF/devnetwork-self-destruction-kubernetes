@@ -14,6 +14,9 @@ variable cluster_name {
     default = "nfaks"
 }
 
+variable resource_group_name {
+}
+
 variable location {
     default = "WestUS2"
 }
