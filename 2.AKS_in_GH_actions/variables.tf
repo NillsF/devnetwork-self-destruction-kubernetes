@@ -14,10 +14,6 @@ variable cluster_name {
     default = "nfaks"
 }
 
-variable resource_group_name {
-    default = "devnetwork-aks-actions"
-}
-
 variable location {
     default = "WestUS2"
 }
