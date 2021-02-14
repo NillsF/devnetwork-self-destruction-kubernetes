@@ -3,7 +3,10 @@ name: 2. AKS in GH Actions
 on:
   push:
     branches: [ main ]
-    paths: 2.AKS_in_GH_actions
+    paths: 
+    - 2.AKS_in_GH_actions/**
+    - .github/workflows/2_aks_in_GH_actions.yml
+
   workflow_dispatch:
 
 jobs:
