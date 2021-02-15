@@ -6,7 +6,6 @@ on:
     paths: 
     - 2.AKS_in_GH_actions/**
     - .github/workflows/2_aks_in_GH_actions.yml
-
   workflow_dispatch:
 
 jobs:
