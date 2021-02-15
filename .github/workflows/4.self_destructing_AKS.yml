@@ -32,7 +32,10 @@ jobs:
         run: terraform apply plan.out
       
       - name: Get kubeconfig
-        run: terraform output kubeconfig > kubeconfig
+        run: terraform output kubeconfig > kubeconfig.tmp
+        
+      - name: Workaround to remove EOT characters
+        run: sed '1d; $d' kubeconfig.tmp > kubeconfig
         
       - name: Get clientID
         run: echo "CLIENTID=$(terraform output clientid)" >> $GITHUB_ENV
@@ -45,3 +48,6 @@ jobs:
         
       - name: Create delete job
         run: kubectl create --kubeconfig ./kubeconfig -f job.yaml
+        
+      - name: Watch pods, until connection gets closed when cluster is deleted.
+        run: kubectl get pods -w
