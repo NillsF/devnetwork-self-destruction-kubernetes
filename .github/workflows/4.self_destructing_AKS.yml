@@ -26,7 +26,7 @@ jobs:
         run: terraform init
 
       - name: Terraform plan
-        run: terraform plan -out plan.out -var resource_group_name=devnetwork-ask-$(echo ${GITHUB_SHA} | cut -c1-6)
+        run: terraform plan -out plan.out -var resource_group_name=devnetwork-aks-$(echo ${GITHUB_SHA} | cut -c1-6)
 
       - name: Terraform apply
         run: terraform apply plan.out
@@ -41,7 +41,7 @@ jobs:
         run: echo ${{ env.CLIENTID }}
 
       - name: Create configmap
-        run: kubectl create --kubeconfig ./kubeconfig configmap az-config --from-literal=rgname=devnetwork-ask-$(echo ${GITHUB_SHA} | cut -c1-6) --from-literal=clientid=${{ env.CLIENTID }}
+        run: kubectl create --kubeconfig ./kubeconfig configmap az-config --from-literal=rgname=devnetwork-aks-$(echo ${GITHUB_SHA} | cut -c1-6) --from-literal=clientid=${{ env.CLIENTID }}
         
       - name: Create delete job
         run: kubectl create --kubeconfig ./kubeconfig -f job.yaml
