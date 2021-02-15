@@ -35,10 +35,13 @@ jobs:
         run: terraform output kubeconfig > kubeconfig
         
       - name: Get clientID
-        run: echo "::set-env name=CLIENTID::$(terraform output clientid)"
+        run: echo "CLIENTID=$(terraform output clientid)" >> $GITHUB_ENV
+        
+      - name: echo clientID
+        run: echo ${{ env.CLIENTID }}
 
       - name: Create configmap
-        run: kubectl create --kubeconfig ./kubeconfig configmap az-config --from-literal=rgname=devnetwork-ask-$(echo ${GITHUB_SHA} | cut -c1-6) --from-literal=clientid=$CLIENTID
+        run: kubectl create --kubeconfig ./kubeconfig configmap az-config --from-literal=rgname=devnetwork-ask-$(echo ${GITHUB_SHA} | cut -c1-6) --from-literal=clientid=${{ env.CLIENTID }}
         
       - name: Create delete job
         run: kubectl create --kubeconfig ./kubeconfig -f job.yaml
