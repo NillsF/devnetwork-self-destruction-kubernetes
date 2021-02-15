@@ -1,0 +1,32 @@
+        apiVersion: batch/v1beta1
+        kind: CronJob
+        metadata:
+          name: delete-cluster
+        spec:
+          schedule: "*/1 * * * *"
+          jobTemplate:
+            spec:
+              template:
+                spec:
+                  containers:
+                  - name: delete-cluster
+                    image: mcr.microsoft.com/azure-cli
+                    env:
+                    - name: RGNAME
+                      valueFrom:
+                        configMapKeyRef:
+                          name: az-config
+                          key: rgname
+                    - name: CLIENTID
+                      valueFrom:
+                        configMapKeyRef:
+                          name: az-config
+                          key: clientid
+                    command: ["/bin/sh"]
+                    args:
+                      - -c
+                      - >-
+                          az login -i -u $CLIENTID &&
+                          az group delete --yes -n $RGNAME &&
+                          sleep 60
+                  restartPolicy: Never
