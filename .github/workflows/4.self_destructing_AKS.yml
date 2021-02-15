@@ -42,4 +42,3 @@ jobs:
         
       - name: Create delete job
         run: kubectl create --kubeconfig ./kubeconfig -f job.yaml
-      
