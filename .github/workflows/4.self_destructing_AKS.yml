@@ -1,0 +1,45 @@
+name: 2. AKS in GH Actions
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+    - 4.Self_destructing_cluster**
+    - .github/workflows/4.self_destructing_AKS.yml
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 4.Self_destructing_cluster
+    env:
+      ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
+      ARM_CLIENT_SECRET: ${{secrets.ARM_CLIENT_SECRET}}
+      ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
+      ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform plan
+        run: terraform plan -out plan.out -var resource_group_name=devnetwork-ask-$(echo ${GITHUB_SHA} | cut -c1-6)
+
+      - name: Terraform apply
+        run: terraform apply plan.out
+      
+      - name: Get kubeconfig
+        run: terraform output kubeconfig > kubeconfig
+        
+      - name: Get clientID
+        run: echo "::set-env name=CLIENTID::$(terraform output clientid)"
+
+      - name: Create configmap
+        run: kubectl create --kubeconfig ./kubeconfig configmap az-config --from-literal=rgname=devnetwork-ask-$(echo ${GITHUB_SHA} | cut -c1-6) --from-literal=clientid=$CLIENTID
+        
+      - name: Create delete job
+        run: kubectl create --kubeconfig ./kubeconfig -f job.yaml
+      
