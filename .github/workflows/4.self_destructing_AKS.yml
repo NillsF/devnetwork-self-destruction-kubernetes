@@ -1,4 +1,4 @@
-name: 2. AKS in GH Actions
+name: 4. Self Destruct cluster
 
 on:
   push:
