@@ -50,4 +50,4 @@ jobs:
         run: kubectl create --kubeconfig ./kubeconfig -f job.yaml
         
       - name: Watch pods, until connection gets closed when cluster is deleted.
-        run: kubectl get pods -w
+        run: kubectl get pods -w --kubeconfig ./kubeconfig
