@@ -6,6 +6,7 @@ resource "azurerm_role_assignment" "delete-permissions" {
 
 output "kubeconfig" {
   value = azurerm_kubernetes_cluster.k8s.kube_config_raw
+  sensitive = true
 }
 
 output "clientid" {
